@@ -4,19 +4,24 @@
 
 **URL**: https://lovable.dev/projects/6cfeb588-6c21-4cea-a5bf-1901283b39ee
 
+````markdown
+# Welcome to your project
+
+## Project info
+
+This repository contains the source for the web project.
+
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
+**Use the web editor**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6cfeb588-6c21-4cea-a5bf-1901283b39ee) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
+If you have a web-based editor or workflow integrated with this repo, follow its instructions to make changes. Otherwise, edit locally using the steps below.
 
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -38,7 +43,7 @@ npm run dev
 
 **Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
+- Navigate to the desired file(s.
 - Click the "Edit" button (pencil icon) at the top right of the file view.
 - Make your changes and commit the changes.
 
@@ -62,12 +67,10 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/6cfeb588-6c21-4cea-a5bf-1901283b39ee) and click on Share -> Publish.
+Deploy with your preferred service (Vercel, Netlify, etc.). See the project README or platform docs for specific steps.
 
-## Can I connect a custom domain to my Lovable project?
+## Can I connect a custom domain?
 
-Yes, you can!
+Yes — configure a custom domain in your hosting provider's domain or project settings.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+````
