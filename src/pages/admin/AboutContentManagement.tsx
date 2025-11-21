@@ -11,7 +11,7 @@ import heroImage from '@/assets/hero-restaurant.jpg';
 
 const AboutContentManagement = () => {
   const { toast } = useToast();
-  const { setHeroImage, setAboutContent, heroTexts, setHeroText } = useRestaurant();
+  const { setHeroImage, setAboutContent, heroTexts, setHeroText, aboutContent } = useRestaurant();
 
   
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
@@ -52,11 +52,13 @@ const AboutContentManagement = () => {
     setTeam(newTeam);
   };
   
-  const [story, setStory] = useState({
-    paragraph1: 'Osei Serwaa Kitchen was founded with a simple mission: to share the rich culinary heritage of Ghana with food lovers everywhere. Our restaurant is named after our founder\'s grandmother, Osei Serwaa, whose recipes and cooking techniques have been passed down through generations.',
-    paragraph2: 'Every dish we serve is prepared using traditional methods and authentic ingredients, ensuring that each bite transports you to the vibrant streets and warm kitchens of Ghana. From our signature jollof rice to our perfectly seasoned banku, we take pride in maintaining the authentic flavors that have made Ghanaian cuisine beloved worldwide.',
-    paragraph3: 'Our commitment to quality, authenticity, and excellent service has made us a favorite destination for those seeking genuine Ghanaian food. Whether you\'re from Ghana or discovering these flavors for the first time, we invite you to experience the warmth and hospitality that define our kitchen.',
-  });
+  const [story, setStory] = useState(() => ({
+    paragraph1: aboutContent?.story?.paragraph1 || 'Osei Serwaa Kitchen was founded with a simple mission: to share the rich culinary heritage of Ghana with food lovers everywhere. Our restaurant is named after our founder\'s grandmother, Osei Serwaa, whose recipes and cooking techniques have been passed down through generations.',
+    paragraph2: aboutContent?.story?.paragraph2 || 'Every dish we serve is prepared using traditional methods and authentic ingredients, ensuring that each bite transports you to the vibrant streets and warm kitchens of Ghana. From our signature jollof rice to our perfectly seasoned banku, we take pride in maintaining the authentic flavors that have made Ghanaian cuisine beloved worldwide.',
+    paragraph3: aboutContent?.story?.paragraph3 || 'Our commitment to quality, authenticity, and excellent service has made us a favorite destination for those seeking genuine Ghanaian food. Whether you\'re from Ghana or discovering these flavors for the first time, we invite you to experience the warmth and hospitality that define our kitchen.',
+  }));
+
+  const [storyImages, setStoryImages] = useState<string[]>(() => aboutContent?.storyImages || []);
 
   const [pageHeader, setPageHeader] = useState({
     title: heroTexts?.about?.title || 'About Us',
@@ -76,9 +78,36 @@ const AboutContentManagement = () => {
     { name: 'Kofi Asante', role: 'Sous Chef', description: 'Bringing innovation while respecting tradition', image: '' },
   ]);
 
+  const storyFileRef = useRef<HTMLInputElement | null>(null);
+
+  const handleAddStoryImage = (file: File) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setStoryImages((prev) => [...prev, reader.result as string]);
+      toast({ title: 'Image added', description: 'Story image uploaded.' });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleChangeStoryImage = (index: number, file: File) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const next = [...storyImages];
+      next[index] = reader.result as string;
+      setStoryImages(next);
+      toast({ title: 'Image updated', description: 'Story image replaced.' });
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveStoryImage = (index: number) => {
+    setStoryImages((prev) => prev.filter((_, i) => i !== index));
+    toast({ title: 'Image removed', description: 'Story image removed.' });
+  };
+
   const handleSave = () => {
     // persist about content, hero text and hero image
-    setAboutContent({ story, values, team });
+    setAboutContent({ story, values, team, storyImages });
     setHeroText('about', { title: pageHeader.title, subtitle: pageHeader.subtitle });
     if (heroImgPreview) {
       setHeroImage('about', heroImgPreview);
@@ -111,6 +140,64 @@ const AboutContentManagement = () => {
               {heroImgPreview && (
                 <img src={heroImgPreview} alt="Hero Preview" className="mt-2 h-32 rounded shadow" />
               )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Our Story Images */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Our Story Images</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {storyImages.length > 0 ? (
+                storyImages.map((src, idx) => (
+                  <div key={idx} className="space-y-2">
+                    <div className="w-full h-32 rounded overflow-hidden border border-border bg-muted">
+                      <img src={src} alt={`Story image ${idx + 1}`} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex gap-2">
+                      <label className="flex-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) handleChangeStoryImage(idx, file);
+                            e.currentTarget.value = '';
+                          }}
+                        />
+                        <Button variant="outline" size="sm" className="w-full">Replace</Button>
+                      </label>
+                      <Button variant="ghost" size="sm" onClick={() => handleRemoveStoryImage(idx)}>Remove</Button>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground col-span-full">No story images yet. Add one below.</p>
+              )}
+            </div>
+
+            <div>
+              <input
+                ref={storyFileRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleAddStoryImage(file);
+                  e.currentTarget.value = '';
+                }}
+              />
+              <Button onClick={() => storyFileRef.current?.click()} size="sm">
+                Add Image
+              </Button>
+              <p className="text-xs text-muted-foreground mt-2">Recommended: landscape images, at least 1200x600px</p>
             </div>
           </div>
         </CardContent>

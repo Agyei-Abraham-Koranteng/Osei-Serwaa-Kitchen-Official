@@ -37,26 +37,30 @@ const About = () => {
 
       <div className="container mx-auto px-4 py-24 bg-gradient-subtle">
 
-        {/* Story Section */}
-        <div className="grid lg:grid-cols-2 gap-16 mb-24 items-center">
-          <div className="space-y-6">
-            <h2 className="text-4xl font-bold">Our Story</h2>
-            <p className="text-muted-foreground leading-relaxed text-lg">
-              {aboutContent?.story?.paragraph1}
-            </p>
-            <p className="text-muted-foreground leading-relaxed text-lg">
-              {aboutContent?.story?.paragraph2}
-            </p>
-            <p className="text-muted-foreground leading-relaxed text-lg">
-              {aboutContent?.story?.paragraph3}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-5">
-            <div className="aspect-square bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl shadow-card hover:scale-105 transition-transform duration-500" />
-            <div className="aspect-square bg-gradient-to-br from-accent/20 to-secondary/20 rounded-2xl shadow-card hover:scale-105 transition-transform duration-500 mt-8" />
-            <div className="aspect-square bg-gradient-to-br from-secondary/20 to-primary/20 rounded-2xl shadow-card hover:scale-105 transition-transform duration-500 -mt-8" />
-            <div className="aspect-square bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl shadow-card hover:scale-105 transition-transform duration-500" />
+        {/* Story Section - each paragraph paired with its image so admin updates reflect inline */}
+        <div className="mb-24">
+          <h2 className="text-4xl font-bold mb-8">Our Story</h2>
+          <div className="space-y-12">
+            {[
+              aboutContent?.story?.paragraph1,
+              aboutContent?.story?.paragraph2,
+              aboutContent?.story?.paragraph3,
+            ].map((para, idx) => (
+              <div key={idx} className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <p className="text-muted-foreground leading-relaxed text-lg">{para}</p>
+                </div>
+                <div className="w-full">
+                  {aboutContent?.storyImages && aboutContent.storyImages[idx] ? (
+                    <div className="rounded-2xl overflow-hidden shadow-card">
+                      <img src={aboutContent.storyImages[idx]} alt={`Story image ${idx + 1}`} className="w-full h-64 object-cover" />
+                    </div>
+                  ) : (
+                    <div className="rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 h-64 shadow-card" />
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

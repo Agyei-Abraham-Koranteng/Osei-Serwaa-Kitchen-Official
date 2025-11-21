@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Twitter } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -12,27 +12,21 @@ const Footer = () => {
             <p className="text-sm opacity-90 leading-relaxed">
               Authentic Ghanaian cuisine prepared with love and traditional recipes passed down through generations.
             </p>
-            <div className="flex space-x-3">
+            <div className="flex items-center">
               <a
-                href="#"
-                className="p-3 bg-background/10 rounded-full hover:bg-gradient-warm hover:scale-110 transition-all duration-300 shadow-sm hover:shadow-md"
-                aria-label="Facebook"
+                href="https://www.tiktok.com/@osei.serwaa.kitch?_r=1&_t=ZM-917FbgHeYI4"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-4 group"
+                aria-label="Follow Osei Serwaa Kitchen on TikTok"
               >
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="p-3 bg-background/10 rounded-full hover:bg-gradient-warm hover:scale-110 transition-all duration-300 shadow-sm hover:shadow-md"
-                aria-label="Instagram"
-              >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
-                href="#"
-                className="p-3 bg-background/10 rounded-full hover:bg-gradient-warm hover:scale-110 transition-all duration-300 shadow-sm hover:shadow-md"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
+                {/* Icon container: white circle so colored SVG is visible on dark footer */}
+                <span className="inline-flex items-center justify-center bg-white rounded-full w-10 h-10 p-1 shadow-sm group-hover:scale-105 transition-transform duration-200">
+                  <img src="/tiktok.svg" alt="" aria-hidden="true" className="w-full h-full object-cover" />
+                </span>
+
+                {/* Visible accessible text */}
+                <span className="text-sm font-medium text-white/90 group-hover:text-white">Follow us on TikTok</span>
               </a>
             </div>
           </div>
@@ -100,9 +94,27 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-background/10 text-center text-sm opacity-80">
-          <p className="font-medium">&copy; {new Date().getFullYear()} Osei Serwaa Kitchen. All rights reserved.</p>
+        {/* Bottom Bar - modernized */}
+        <div className="mt-12 pt-8 border-t border-background/10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-sm opacity-90">
+            <div className="text-white/90 text-center sm:text-left">
+              <span className="font-medium">&copy; {new Date().getFullYear()} Osei Serwaa Kitchen.</span>
+              <span className="hidden sm:inline ml-2">All rights reserved.</span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <span className="text-white/80 text-sm hidden sm:inline">Made with <span aria-hidden="true">♥</span> BY</span>
+              <a
+                href="https://www.facebook.com/profile.php?id=100082206290703"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-3 bg-white/5 hover:bg-white/10 px-3 py-1.5 rounded-md transition-colors"
+              >
+                <img src="/logo%20main.png" alt="AKA-TECH" className="h-5 w-5 rounded-sm object-cover" />
+                <span className="text-sm font-semibold text-white/90">AKA-TECH</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

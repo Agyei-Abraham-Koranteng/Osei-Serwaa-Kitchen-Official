@@ -74,13 +74,7 @@ const Dashboard = () => {
                       <div>
                         <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
                         <p className="text-3xl font-bold mt-2">{stat.value}</p>
-                        {stat.title === 'Site Visitors' && (
-                          <div className="mt-3">
-                            <Button size="sm" variant="ghost" onClick={resetSiteVisitors} className="px-2">
-                              <RotateCw className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        )}
+                        {/* Reset button removed for Site Visitors */}
                       </div>
                       <div className={`p-3 rounded-full ${stat.bgColor}`}>
                         <Icon className={`h-6 w-6 ${stat.color}`} />

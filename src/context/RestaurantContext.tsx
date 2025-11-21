@@ -52,9 +52,11 @@ export interface HomeContent {
 
 export interface AboutContent {
   story: { paragraph1: string; paragraph2: string; paragraph3: string };
+  storyImages?: string[];
   values: { title: string; description: string }[];
   team: { name: string; role: string; description: string; image: string }[];
 }
+
 
 export interface GalleryImage {
   id: number;
@@ -207,6 +209,7 @@ export const RestaurantProvider = ({ children }: { children: ReactNode }) => {
         paragraph2: "Every dish we serve is prepared using traditional methods and authentic ingredients, ensuring that each bite transports you to the vibrant streets and warm kitchens of Ghana. From our signature jollof rice to our perfectly seasoned banku, we take pride in maintaining the authentic flavors that have made Ghanaian cuisine beloved worldwide.",
         paragraph3: "Our commitment to quality, authenticity, and excellent service has made us a favorite destination for those seeking genuine Ghanaian food. Whether you're from Ghana or discovering these flavors for the first time, we invite you to experience the warmth and hospitality that define our kitchen.",
       },
+      storyImages: [],
       values: [
         { title: 'Authenticity', description: 'We stay true to traditional recipes and cooking methods' },
         { title: 'Quality', description: 'Only the freshest ingredients make it to your plate' },
@@ -250,32 +253,66 @@ export const RestaurantProvider = ({ children }: { children: ReactNode }) => {
     };
   });
 
-  // Site visitors (simple client-side counter persisted in localStorage)
-  const [siteVisitors, setSiteVisitors] = useState<number>(() => {
-    try {
-      const raw = localStorage.getItem('site-visitors');
-      return raw ? parseInt(raw, 10) : 0;
-    } catch {
-      return 0;
-    }
-  });
+  // Site visitors (real-time via WebSocket server)
+  const [siteVisitors, setSiteVisitors] = useState<number>(0);
 
+  // Keep increment/reset functions in API for compatibility.
+  // For the real-time version we use connection count from WS, so these are no-ops.
   const incrementSiteVisitors = () => {
-    setSiteVisitors((prev) => {
-      const next = prev + 1;
-      try {
-        localStorage.setItem('site-visitors', String(next));
-      } catch {}
-      return next;
-    });
+    // no-op: server counts active connections
   };
 
   const resetSiteVisitors = () => {
-    try {
-      localStorage.setItem('site-visitors', '0');
-    } catch {}
-    setSiteVisitors(0);
+    // no-op: admin reset not implemented here
   };
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    let ws: WebSocket | null = null;
+    let reconnectTimer: number | undefined;
+
+    const connect = () => {
+      try {
+        ws = new WebSocket('ws://localhost:8081');
+
+        ws.onopen = () => {
+          // connected
+        };
+
+        ws.onmessage = (ev) => {
+          try {
+            const data = JSON.parse(ev.data as string);
+            if (data.type === 'visitors' && typeof data.count === 'number') {
+              setSiteVisitors(data.count);
+            }
+          } catch (e) {
+            // ignore malformed messages
+          }
+        };
+
+        ws.onclose = () => {
+          // Attempt reconnect after a delay
+          reconnectTimer = window.setTimeout(connect, 3000) as unknown as number;
+        };
+
+        ws.onerror = () => {
+          ws?.close();
+        };
+      } catch (e) {
+        // fallback: do nothing
+      }
+    };
+
+    connect();
+
+    return () => {
+      if (reconnectTimer) clearTimeout(reconnectTimer);
+      try {
+        ws?.close();
+      } catch {}
+    };
+  }, []);
 
   // Load cart from localStorage
   useEffect(() => {
@@ -289,6 +326,35 @@ export const RestaurantProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     localStorage.setItem('restaurant-cart', JSON.stringify(cart));
   }, [cart]);
+
+  // Listen for localStorage changes from other tabs/windows and update state
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      try {
+        if (e.key === 'restaurant-about-content') {
+          const v = e.newValue ? JSON.parse(e.newValue) : null;
+          if (v) setAboutContentState(v);
+        }
+        if (e.key === 'restaurant-hero-images') {
+          const v = e.newValue ? JSON.parse(e.newValue) : {};
+          setHeroImages(v);
+        }
+        if (e.key === 'restaurant-hero-texts') {
+          const v = e.newValue ? JSON.parse(e.newValue) : {};
+          setHeroTexts(v);
+        }
+        if (e.key === 'restaurant-gallery-images') {
+          const v = e.newValue ? JSON.parse(e.newValue) : [];
+          setGalleryImagesState(v);
+        }
+      } catch {
+        // ignore parse errors
+      }
+    };
+
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
 
   // Menu functions
   const addMenuItem = (item: Omit<MenuItem, 'id'>) => {
