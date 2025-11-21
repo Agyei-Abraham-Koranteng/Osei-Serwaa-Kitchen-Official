@@ -9,7 +9,7 @@ import { ContactMessage } from '@/context/RestaurantContext';
 import heroImage from '@/assets/hero-restaurant.jpg';
 
 const ContactMessagesManagement = () => {
-  const { contactMessages, updateContactMessageStatus, deleteContactMessage } = useRestaurant();
+  const { contactMessages, updateContactMessageStatus, deleteContactMessage, heroTexts } = useRestaurant();
   const { toast } = useToast();
 
   const handleStatusChange = (id: string, newStatus: ContactMessage['status']) => {
@@ -57,8 +57,8 @@ const ContactMessagesManagement = () => {
         </div>
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-10">
-            <h1 className="text-4xl font-bold text-white mb-2">Contact Messages</h1>
-            <p className="text-white/90">View and manage customer inquiries</p>
+            <h1 className="text-4xl font-bold text-white mb-2">{heroTexts?.contact?.title || 'Contact'}</h1>
+            <p className="text-white/90">{heroTexts?.contact?.subtitle || 'Have questions? We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.'}</p>
           </div>
         </div>
       </div>

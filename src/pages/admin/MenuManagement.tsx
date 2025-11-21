@@ -153,8 +153,8 @@ const MenuManagement = () => {
         </div>
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-10">
-            <h1 className="text-4xl font-bold text-white mb-2">Menu Management</h1>
-            <p className="text-white/90">Manage your restaurant menu items</p>
+            <h1 className="text-4xl font-bold text-white mb-2">{heroTexts?.menu?.title || 'Our Menu'}</h1>
+            <p className="text-white/90">{heroTexts?.menu?.subtitle || 'Explore our selection of authentic Ghanaian dishes, prepared fresh daily with traditional recipes'}</p>
           </div>
         </div>
       </div>

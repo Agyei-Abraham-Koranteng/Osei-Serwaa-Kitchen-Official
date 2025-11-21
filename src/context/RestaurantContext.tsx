@@ -238,9 +238,9 @@ export const RestaurantProvider = ({ children }: { children: ReactNode }) => {
         heroTitle: 'Contact Us',
         heroSubtitle: "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
       },
-      contactInfo: {
+        contactInfo: {
         address: '123 Liberation Road\nAccra, Ghana',
-        phone: '+233 24 123 4567',
+        phone: '+233 24 750 5196',
         email: 'hello@oseiserwaa.com',
         hours: { weekday: 'Mon - Fri: 11:00 AM - 10:00 PM', weekend: 'Sat - Sun: 10:00 AM - 11:00 PM' },
       },

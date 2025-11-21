@@ -60,6 +60,19 @@ const Reservations = () => {
       status: 'pending',
     });
 
+    // Open WhatsApp to send reservation details to restaurant number
+    try {
+      const waRaw = contactPageInfo?.contactInfo?.phone || '+233 24 750 5196';
+      const waNumber = waRaw.replace(/\D/g, '');
+      const waMessage = `Reservation Request\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nDate: ${formData.date}\nTime: ${formData.time}\nGuests: ${formData.guests}\nSpecial Requests: ${formData.specialRequests || 'None'}`;
+      const waUrl = `https://wa.me/${waNumber}?text=${encodeURIComponent(waMessage)}`;
+      // open in new tab/window
+      window.open(waUrl, '_blank');
+    } catch (err) {
+      // silently fail if window isn't available or phone malformed
+      console.warn('Unable to open WhatsApp link', err);
+    }
+
     toast({
       title: 'Reservation submitted!',
       description: 'We will confirm your reservation shortly via email or phone.',
@@ -161,7 +174,7 @@ const Reservations = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="+233 24 123 4567"
+                    placeholder="+233 24 750 5196"
                     required
                   />
                 </div>
@@ -250,7 +263,7 @@ const Reservations = () => {
                 </p>
                 <p className="text-sm text-muted-foreground mt-4">
                   For large groups (20+ guests), please call us directly at{' '}
-                  <span className="text-primary font-medium">{contactPageInfo?.contactInfo?.phone || '+233 24 123 4567'}</span>
+                  <span className="text-primary font-medium">{contactPageInfo?.contactInfo?.phone || '+233 24 750 5196'}</span>
                 </p>
               </div>
             </CardContent>

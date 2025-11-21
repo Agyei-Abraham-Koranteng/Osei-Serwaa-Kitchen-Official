@@ -90,7 +90,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-bold mb-2 text-lg">Phone</h3>
-                    <p className="text-sm text-muted-foreground">{contactPageInfo?.contactInfo?.phone || '+233 24 123 4567'}</p>
+                    <p className="text-sm text-muted-foreground">{contactPageInfo?.contactInfo?.phone || '+233 24 750 5196'}</p>
                   </div>
                 </div>
               </CardContent>

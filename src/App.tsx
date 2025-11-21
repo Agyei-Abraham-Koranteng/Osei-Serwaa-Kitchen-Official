@@ -28,6 +28,7 @@ import ReservationManagement from "./pages/admin/ReservationManagement";
 import GalleryManagement from "./pages/admin/GalleryManagement";
 import ContactInfoManagement from "./pages/admin/ContactInfoManagement";
 import ContactMessagesManagement from "./pages/admin/ContactMessagesManagement";
+import ManageAdmins from "./pages/admin/ManageAdmins";
 
 import NotFound from "./pages/NotFound";
 
@@ -62,6 +63,7 @@ const App = () => (
                 <Route path="gallery" element={<GalleryManagement />} />
                 <Route path="contact" element={<ContactInfoManagement />} />
                 <Route path="contact-messages" element={<ContactMessagesManagement />} />
+                <Route path="manage-admins" element={<ManageAdmins />} />
               </Route>
 
               {/* 404 Route */}

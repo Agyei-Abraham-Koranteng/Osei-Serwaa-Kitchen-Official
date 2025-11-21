@@ -14,7 +14,7 @@ const ContactInfoManagement = () => {
   
   const [contactInfo, setContactInfo] = useState({
     address: '123 Liberation Road\nAccra, Ghana',
-    phone: '+233 24 123 4567',
+    phone: '+233 24 750 5196',
     email: 'hello@oseiserwaa.com',
     hours: {
       weekday: 'Mon - Fri: 11:00 AM - 10:00 PM',
@@ -62,8 +62,8 @@ const ContactInfoManagement = () => {
         </div>
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-10">
-            <h1 className="text-4xl font-bold text-white mb-2">Contact Info Management</h1>
-            <p className="text-white/90">Manage contact information displayed on the contact page</p>
+            <h1 className="text-4xl font-bold text-white mb-2">{heroTexts?.contact?.title || 'Contact'}</h1>
+            <p className="text-white/90">{heroTexts?.contact?.subtitle || 'Have questions? We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.'}</p>
           </div>
         </div>
       </div>
@@ -131,7 +131,7 @@ const ContactInfoManagement = () => {
                 id="phone"
                 value={contactInfo.phone}
                 onChange={(e) => setContactInfo({ ...contactInfo, phone: e.target.value })}
-                placeholder="+233 24 123 4567"
+                placeholder="+233 24 750 5196"
               />
             </div>
             <div className="space-y-2">

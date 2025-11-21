@@ -39,9 +39,11 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2 group">
-            <span className={`text-2xl md:text-3xl font-bold ${isScrolled ? 'gradient-text' : 'text-white'} hover:scale-105 transition-transform duration-300`}>
-              Osei Serwaa Kitchen
-            </span>
+            <img
+              src={isScrolled ? '/logo%20black.png' : '/logo%20main.png'}
+              alt="Osei Serwaa Kitchen"
+              className="h-8 md:h-10 hover:scale-105 transition-transform duration-300"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -68,7 +70,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <Button variant="ghost" size="sm" className={`gap-2 ${isScrolled ? '' : 'text-white/90 hover:text-white hover:bg-white/10'}`}>
               <Phone className="h-4 w-4" />
-              <span className="text-sm">+233 24 123 4567</span>
+              <span className="text-sm">+233 24 750 5196</span>
             </Button>
           </div>
 
@@ -106,7 +108,7 @@ const Navbar = () => {
               <div className="pt-4 border-t border-border px-4">
                 <Button variant="outline" size="sm" className="w-full gap-2">
                   <Phone className="h-4 w-4" />
-                  <span>+233 24 123 4567</span>
+                  <span>+233 24 750 5196</span>
                 </Button>
               </div>
             </div>

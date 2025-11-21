@@ -25,7 +25,7 @@ const GalleryManagement = () => {
 
   const [pageHeader, setPageHeader] = useState({
     title: heroTexts?.gallery?.title || 'Gallery',
-    subtitle: heroTexts?.gallery?.subtitle || '',
+    subtitle: heroTexts?.gallery?.subtitle || 'Experience the vibrant atmosphere and authentic Ghanaian cuisine at Osei Serwaa Kitchen',
   });
   const [images, setImages] = useState<GalleryImage[]>([
     { id: 1, src: heroRestaurant, alt: 'Restaurant Interior', category: 'Ambiance' },
@@ -97,8 +97,8 @@ const GalleryManagement = () => {
         </div>
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-10">
-            <h1 className="text-4xl font-bold text-white mb-2">Gallery Management</h1>
-            <p className="text-white/90">Manage gallery images displayed on the public site</p>
+            <h1 className="text-4xl font-bold text-white mb-2">{heroTexts?.gallery?.title || 'Gallery'}</h1>
+            <p className="text-white/90">{heroTexts?.gallery?.subtitle || 'Experience the vibrant atmosphere and authentic Ghanaian cuisine at Osei Serwaa Kitchen'}</p>
           </div>
         </div>
       </div>

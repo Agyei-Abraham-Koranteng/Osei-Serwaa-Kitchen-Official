@@ -13,10 +13,7 @@ const AboutContentManagement = () => {
   const { toast } = useToast();
   const { setHeroImage, setAboutContent, heroTexts, setHeroText } = useRestaurant();
 
-  const [pageHeader, setPageHeader] = useState({
-    title: heroTexts?.about?.title || 'About Us',
-    subtitle: heroTexts?.about?.subtitle || '',
-  });
+  
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   // Hero image editing state
@@ -59,6 +56,11 @@ const AboutContentManagement = () => {
     paragraph1: 'Osei Serwaa Kitchen was founded with a simple mission: to share the rich culinary heritage of Ghana with food lovers everywhere. Our restaurant is named after our founder\'s grandmother, Osei Serwaa, whose recipes and cooking techniques have been passed down through generations.',
     paragraph2: 'Every dish we serve is prepared using traditional methods and authentic ingredients, ensuring that each bite transports you to the vibrant streets and warm kitchens of Ghana. From our signature jollof rice to our perfectly seasoned banku, we take pride in maintaining the authentic flavors that have made Ghanaian cuisine beloved worldwide.',
     paragraph3: 'Our commitment to quality, authenticity, and excellent service has made us a favorite destination for those seeking genuine Ghanaian food. Whether you\'re from Ghana or discovering these flavors for the first time, we invite you to experience the warmth and hospitality that define our kitchen.',
+  });
+
+  const [pageHeader, setPageHeader] = useState({
+    title: heroTexts?.about?.title || 'About Us',
+    subtitle: heroTexts?.about?.subtitle || story.paragraph1,
   });
 
   const [values, setValues] = useState([
