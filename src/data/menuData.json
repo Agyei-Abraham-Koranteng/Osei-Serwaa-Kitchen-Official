@@ -1,0 +1,175 @@
+{
+  "categories": [
+    {
+      "id": "1",
+      "name": "Main Dishes",
+      "description": "Traditional Ghanaian favorites"
+    },
+    {
+      "id": "2",
+      "name": "Soups & Stews",
+      "description": "Rich and flavorful soups"
+    },
+    {
+      "id": "3",
+      "name": "Sides",
+      "description": "Perfect accompaniments"
+    },
+    {
+      "id": "4",
+      "name": "Beverages",
+      "description": "Refreshing drinks"
+    },
+    {
+      "id": "5",
+      "name": "Desserts",
+      "description": "Sweet endings"
+    }
+  ],
+  "menuItems": [
+    {
+      "id": "1",
+      "name": "Jollof Rice with Grilled Chicken",
+      "description": "Our signature dish - aromatic jollof rice cooked with tomatoes, peppers, and spices, served with perfectly grilled chicken",
+      "price": 45.00,
+      "category": "Main Dishes",
+      "categoryId": "1",
+      "image": "/src/assets/dish-jollof.jpg",
+      "featured": true,
+      "available": true,
+      "spicyLevel": 2
+    },
+    {
+      "id": "2",
+      "name": "Waakye",
+      "description": "Rice and beans cooked with millet leaves, served with spaghetti, eggs, and spicy shito",
+      "price": 40.00,
+      "category": "Main Dishes",
+      "categoryId": "1",
+      "image": "/src/assets/dish-waakye.jpg",
+      "featured": true,
+      "available": true,
+      "spicyLevel": 3
+    },
+    {
+      "id": "3",
+      "name": "Banku with Tilapia",
+      "description": "Fermented corn and cassava dough served with grilled tilapia and hot pepper sauce",
+      "price": 55.00,
+      "category": "Main Dishes",
+      "categoryId": "1",
+      "image": "/src/assets/dish-banku.jpg",
+      "featured": true,
+      "available": true,
+      "spicyLevel": 3
+    },
+    {
+      "id": "4",
+      "name": "Fufu with Light Soup",
+      "description": "Pounded cassava and plantain served with aromatic tomato-based light soup",
+      "price": 42.00,
+      "category": "Main Dishes",
+      "categoryId": "1",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 2
+    },
+    {
+      "id": "5",
+      "name": "Fried Rice with Chicken",
+      "description": "Colorful fried rice with vegetables, served with crispy fried chicken",
+      "price": 43.00,
+      "category": "Main Dishes",
+      "categoryId": "1",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 1
+    },
+    {
+      "id": "6",
+      "name": "Groundnut Soup",
+      "description": "Rich peanut-based soup with meat, perfect with fufu or rice balls",
+      "price": 38.00,
+      "category": "Soups & Stews",
+      "categoryId": "2",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 2
+    },
+    {
+      "id": "7",
+      "name": "Palava Sauce",
+      "description": "Spinach stew with tomatoes, onions, and your choice of protein",
+      "price": 35.00,
+      "category": "Soups & Stews",
+      "categoryId": "2",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 2
+    },
+    {
+      "id": "8",
+      "name": "Kelewele",
+      "description": "Spicy fried plantains seasoned with ginger and peppers",
+      "price": 15.00,
+      "category": "Sides",
+      "categoryId": "3",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 3
+    },
+    {
+      "id": "9",
+      "name": "Fried Plantains",
+      "description": "Golden fried ripe plantains, perfectly sweet",
+      "price": 12.00,
+      "category": "Sides",
+      "categoryId": "3",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 0
+    },
+    {
+      "id": "10",
+      "name": "Sobolo",
+      "description": "Refreshing hibiscus drink with ginger and spices",
+      "price": 8.00,
+      "category": "Beverages",
+      "categoryId": "4",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 0
+    },
+    {
+      "id": "11",
+      "name": "Fresh Coconut Water",
+      "description": "Chilled coconut water served straight from the coconut",
+      "price": 10.00,
+      "category": "Beverages",
+      "categoryId": "4",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 0
+    },
+    {
+      "id": "12",
+      "name": "Bofrot",
+      "description": "Sweet fried dough balls, light and fluffy",
+      "price": 10.00,
+      "category": "Desserts",
+      "categoryId": "5",
+      "image": "",
+      "featured": false,
+      "available": true,
+      "spicyLevel": 0
+    }
+  ]
+}

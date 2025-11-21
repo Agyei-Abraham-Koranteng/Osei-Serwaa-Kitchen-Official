@@ -1,0 +1,40 @@
+{
+  "reservations": [
+    {
+      "id": "RES-001",
+      "name": "Michael Johnson",
+      "email": "michael@example.com",
+      "phone": "+233 24 555 1234",
+      "date": "2025-01-20",
+      "time": "19:00",
+      "guests": 4,
+      "specialRequests": "Window seat if possible",
+      "status": "confirmed",
+      "createdAt": "2025-01-10T08:15:00"
+    },
+    {
+      "id": "RES-002",
+      "name": "Sarah Williams",
+      "email": "sarah@example.com",
+      "phone": "+233 20 777 8888",
+      "date": "2025-01-22",
+      "time": "18:30",
+      "guests": 2,
+      "specialRequests": "Anniversary dinner",
+      "status": "pending",
+      "createdAt": "2025-01-12T16:45:00"
+    },
+    {
+      "id": "RES-003",
+      "name": "David Brown",
+      "email": "david@example.com",
+      "phone": "+233 24 999 0000",
+      "date": "2025-01-18",
+      "time": "20:00",
+      "guests": 6,
+      "specialRequests": "Birthday celebration",
+      "status": "confirmed",
+      "createdAt": "2025-01-08T12:30:00"
+    }
+  ]
+}

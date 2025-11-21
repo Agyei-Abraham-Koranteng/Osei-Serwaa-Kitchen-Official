@@ -1,0 +1,189 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Restaurant warm color palette */
+    --background: 40 20% 97%;
+    --foreground: 25 30% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 25 30% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 25 30% 15%;
+
+    /* Warm amber/orange as primary - appetizing and inviting */
+    --primary: 30 95% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 30 95% 48%;
+    --primary-glow: 30 95% 65%;
+
+    /* Deep brown for secondary - elegant and grounded */
+    --secondary: 25 40% 35%;
+    --secondary-foreground: 40 20% 95%;
+
+    /* Soft cream/beige for muted elements */
+    --muted: 40 25% 92%;
+    --muted-foreground: 25 20% 45%;
+
+    /* Dark footer color */
+    --footer-dark: 220 39% 11%;
+
+    /* Gold accent for premium feel */
+    --accent: 45 90% 60%;
+    --accent-foreground: 25 30% 15%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 40 20% 88%;
+    --input: 40 20% 88%;
+    --ring: 30 95% 55%;
+
+    --radius: 0.75rem;
+
+    /* Enhanced gradients for modern feel */
+    --gradient-primary: linear-gradient(135deg, hsl(30 95% 55%) 0%, hsl(35 90% 50%) 100%);
+    --gradient-dark: linear-gradient(135deg, hsl(25 40% 25%) 0%, hsl(25 40% 35%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(40 25% 96%) 0%, hsl(40 20% 97%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(30 95% 55%) 0%, hsl(45 90% 60%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(25 40% 25%) 0%, hsl(30 95% 55% / 0.1) 100%);
+    
+    /* Enhanced shadows for depth */
+    --shadow-elegant: 0 20px 50px -10px hsl(30 95% 55% / 0.25);
+    --shadow-soft: 0 4px 20px -4px hsl(25 30% 15% / 0.08);
+    --shadow-glow: 0 0 40px hsl(30 95% 55% / 0.3);
+    --shadow-card: 0 8px 30px -8px hsl(25 30% 15% / 0.12);
+
+    /* Smooth transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .dark {
+    --background: 25 30% 12%;
+    --foreground: 40 20% 95%;
+
+    --card: 25 35% 15%;
+    --card-foreground: 40 20% 95%;
+
+    --popover: 25 35% 15%;
+    --popover-foreground: 40 20% 95%;
+
+    --primary: 30 95% 55%;
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 30 95% 48%;
+    --primary-glow: 30 95% 65%;
+
+    --secondary: 25 30% 25%;
+    --secondary-foreground: 40 20% 95%;
+
+    --muted: 25 25% 20%;
+    --muted-foreground: 40 15% 60%;
+
+    --accent: 45 90% 60%;
+    --accent-foreground: 25 30% 12%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 40 20% 95%;
+
+    --border: 25 25% 25%;
+    --input: 25 25% 25%;
+    --ring: 30 95% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  /* Hover scale animation */
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-[1.02] active:scale-[0.98];
+  }
+
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent;
+  }
+
+  /* Glass morphism */
+  .glass {
+    @apply bg-background/80 backdrop-blur-md border border-border/50;
+  }
+
+  /* Shine effect */
+  .shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shine::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .shine:hover::before {
+    left: 100%;
+  }
+}
