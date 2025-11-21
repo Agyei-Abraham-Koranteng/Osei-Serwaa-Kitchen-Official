@@ -4,13 +4,36 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useState, useRef } from 'react';
+import { useRestaurant } from '@/context/RestaurantContext';
 import { useToast } from '@/hooks/use-toast';
 import { Upload, X } from 'lucide-react';
 import heroImage from '@/assets/hero-restaurant.jpg';
 
 const AboutContentManagement = () => {
   const { toast } = useToast();
+  const { setHeroImage, setAboutContent, heroTexts, setHeroText } = useRestaurant();
+
+  const [pageHeader, setPageHeader] = useState({
+    title: heroTexts?.about?.title || 'About Us',
+    subtitle: heroTexts?.about?.subtitle || '',
+  });
   const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+
+  // Hero image editing state
+  const [heroImgPreview, setHeroImgPreview] = useState<string | null>(null);
+  const [heroImgFile, setHeroImgFile] = useState<File | null>(null);
+
+  const handleHeroImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setHeroImgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeroImgPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleImageUpload = (index: number, file: File) => {
     const reader = new FileReader();
@@ -52,6 +75,12 @@ const AboutContentManagement = () => {
   ]);
 
   const handleSave = () => {
+    // persist about content, hero text and hero image
+    setAboutContent({ story, values, team });
+    setHeroText('about', { title: pageHeader.title, subtitle: pageHeader.subtitle });
+    if (heroImgPreview) {
+      setHeroImage('about', heroImgPreview);
+    }
     toast({
       title: 'Changes saved!',
       description: 'About page content has been updated successfully.',
@@ -62,19 +91,55 @@ const AboutContentManagement = () => {
     <div className="space-y-8">
       {/* Hero Section */}
       <div className="relative -mx-6 -mt-6 mb-8 overflow-hidden rounded-b-xl">
-        <div 
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="h-48 relative">
+          <img src={heroImgPreview || heroImage} alt="About hero preview" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
         </div>
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-10">
-            <h1 className="text-4xl font-bold text-white mb-2">About Content Management</h1>
-            <p className="text-white/90">Manage the content displayed on the about page</p>
-          </div>
-        </div>
       </div>
+      {/* Hero Image Upload */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Hero Image</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="hero-image">Hero Image</Label>
+              <Input type="file" id="hero-image" accept="image/*" onChange={handleHeroImgChange} />
+              {heroImgPreview && (
+                <img src={heroImgPreview} alt="Hero Preview" className="mt-2 h-32 rounded shadow" />
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Page Header (Title & Subtitle) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Page Header</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="hero-title">Title</Label>
+              <Input
+                id="hero-title"
+                value={pageHeader.title}
+                onChange={(e) => setPageHeader({ ...pageHeader, title: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="hero-subtitle">Subtitle</Label>
+              <Input
+                id="hero-subtitle"
+                value={pageHeader.subtitle}
+                onChange={(e) => setPageHeader({ ...pageHeader, subtitle: e.target.value })}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Our Story */}
       <Card>
@@ -167,7 +232,7 @@ const AboutContentManagement = () => {
                   <Label>Profile Photo</Label>
                   <div className="flex items-start gap-4">
                     <div className="relative">
-                      {member.image ? (
+                          {member.image ? (
                         <div className="relative w-28 h-28 rounded-full overflow-hidden border-2 border-border">
                           <img
                             src={member.image}
@@ -176,7 +241,9 @@ const AboutContentManagement = () => {
                           />
                           <button
                             onClick={() => handleRemoveImage(index)}
-                            className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 hover:bg-destructive/90 transition-colors"
+                                className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 hover:bg-destructive/90 transition-colors"
+                                aria-label={`Remove ${member.name} photo`}
+                                title={`Remove ${member.name} photo`}
                             type="button"
                           >
                             <X className="h-3 w-3" />
@@ -184,7 +251,7 @@ const AboutContentManagement = () => {
                         </div>
                       ) : (
                         <div className="w-28 h-28 rounded-full bg-gradient-to-br from-primary/20 via-accent/20 to-secondary/20 border-2 border-dashed border-border flex items-center justify-center">
-                          <Upload className="h-8 w-8 text-muted-foreground" />
+                          <Upload className="h-8 w-8 text-muted-foreground" aria-hidden="true" focusable="false" />
                         </div>
                       )}
                     </div>
@@ -201,6 +268,8 @@ const AboutContentManagement = () => {
                         }}
                         className="hidden"
                         id={`team-image-${index}`}
+                        aria-label={`Upload profile photo for ${member.name}`}
+                        title={`Upload profile photo for ${member.name}`}
                       />
                       <Button
                         type="button"
@@ -225,6 +294,7 @@ const AboutContentManagement = () => {
                     <Input
                       id={`team-name-${index}`}
                       value={member.name}
+                      placeholder="Full name"
                       onChange={(e) => {
                         const newTeam = [...team];
                         newTeam[index].name = e.target.value;
@@ -237,6 +307,7 @@ const AboutContentManagement = () => {
                     <Input
                       id={`team-role-${index}`}
                       value={member.role}
+                      placeholder="Role / title"
                       onChange={(e) => {
                         const newTeam = [...team];
                         newTeam[index].role = e.target.value;
@@ -250,6 +321,7 @@ const AboutContentManagement = () => {
                   <Textarea
                     id={`team-desc-${index}`}
                     value={member.description}
+                    placeholder="Short bio or role description"
                     onChange={(e) => {
                       const newTeam = [...team];
                       newTeam[index].description = e.target.value;

@@ -7,7 +7,7 @@ import { Search, ChefHat } from 'lucide-react';
 import heroImage from '@/assets/hero-restaurant.jpg';
 
 const Menu = () => {
-  const { menuItems, categories } = useRestaurant();
+  const { menuItems, categories, heroImages, heroTexts } = useRestaurant();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -18,27 +18,36 @@ const Menu = () => {
     return matchesCategory && matchesSearch;
   });
 
+  const hero = heroImages.menu || heroImage;
+  const heroTitle = heroTexts?.menu?.title || 'Our Menu';
+  const heroSubtitle = heroTexts?.menu?.subtitle || 'Explore our selection of authentic Ghanaian dishes, prepared fresh daily with traditional recipes';
+
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 scale-105 blur-[0.5px]">
+          <img src={hero} alt="Menu hero" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center space-y-6 max-w-4xl mx-auto">
-            <div className="flex justify-center mb-4">
-              <ChefHat className="h-16 w-16 text-primary" strokeWidth={1.5} />
+
+        <div className="relative z-10 container mx-auto px-4 text-center py-20">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="animate-fade-in space-y-6">
+              <div className="flex justify-center mb-4">
+                <ChefHat className="h-16 w-16 text-primary" strokeWidth={1.5} />
+              </div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight text-white">
+                {heroTitle.includes('Menu') ? (
+                  <>Our <span className="gradient-text">Menu</span></>
+                ) : (
+                  heroTitle
+                )}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90">
+                {heroSubtitle}
+              </p>
             </div>
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white">
-              Our <span className="gradient-text">Menu</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Explore our selection of authentic Ghanaian dishes, prepared fresh daily with traditional recipes
-            </p>
           </div>
         </div>
       </section>

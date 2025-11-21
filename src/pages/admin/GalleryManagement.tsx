@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
+import { useRestaurant } from '@/context/RestaurantContext';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Trash2 } from 'lucide-react';
 import dishJollof from '@/assets/dish-jollof.jpg';
@@ -20,6 +21,12 @@ interface GalleryImage {
 
 const GalleryManagement = () => {
   const { toast } = useToast();
+  const { setHeroImage, setGalleryImages, heroTexts, setHeroText } = useRestaurant();
+
+  const [pageHeader, setPageHeader] = useState({
+    title: heroTexts?.gallery?.title || 'Gallery',
+    subtitle: heroTexts?.gallery?.subtitle || '',
+  });
   const [images, setImages] = useState<GalleryImage[]>([
     { id: 1, src: heroRestaurant, alt: 'Restaurant Interior', category: 'Ambiance' },
     { id: 2, src: dishJollof, alt: 'Jollof Rice', category: 'Dishes' },
@@ -28,6 +35,22 @@ const GalleryManagement = () => {
     { id: 5, src: heroRestaurant, alt: 'Dining Experience', category: 'Ambiance' },
     { id: 6, src: dishJollof, alt: 'Signature Dish', category: 'Dishes' },
   ]);
+
+  // Hero image editing state
+  const [heroImgPreview, setHeroImgPreview] = useState<string | null>(null);
+  const [heroImgFile, setHeroImgFile] = useState<File | null>(null);
+
+  const handleHeroImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setHeroImgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeroImgPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleAddImage = () => {
     const newImage: GalleryImage = {
@@ -52,6 +75,12 @@ const GalleryManagement = () => {
   };
 
   const handleSave = () => {
+    // persist gallery images, hero text and hero image
+    setGalleryImages(images);
+    setHeroText('gallery', { title: pageHeader.title, subtitle: pageHeader.subtitle });
+    if (heroImgPreview) {
+      setHeroImage('gallery', heroImgPreview);
+    }
     toast({
       title: 'Changes saved!',
       description: 'Gallery has been updated successfully.',
@@ -62,19 +91,62 @@ const GalleryManagement = () => {
     <div className="space-y-8">
       {/* Hero Section */}
       <div className="relative -mx-6 -mt-6 mb-8 overflow-hidden rounded-b-xl">
-        <div 
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroRestaurant})` }}
-        >
+        <div className="h-48 relative">
+          <img src={heroImgPreview || heroRestaurant} alt="Gallery hero preview" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
         </div>
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-10">
             <h1 className="text-4xl font-bold text-white mb-2">Gallery Management</h1>
-            <p className="text-white/90">Manage images displayed in the gallery</p>
+            <p className="text-white/90">Manage gallery images displayed on the public site</p>
           </div>
         </div>
       </div>
+
+      {/* Hero Image Upload */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Hero Image</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="hero-image">Hero Image</Label>
+              <Input type="file" id="hero-image" accept="image/*" onChange={handleHeroImgChange} />
+              {heroImgPreview && (
+                <img src={heroImgPreview} alt="Hero Preview" className="mt-2 h-32 rounded shadow" />
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Page Header (Title & Subtitle) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Page Header</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="hero-title">Title</Label>
+              <Input
+                id="hero-title"
+                value={pageHeader.title}
+                onChange={(e) => setPageHeader({ ...pageHeader, title: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="hero-subtitle">Subtitle</Label>
+              <Input
+                id="hero-subtitle"
+                value={pageHeader.subtitle}
+                onChange={(e) => setPageHeader({ ...pageHeader, subtitle: e.target.value })}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="flex justify-end">
         <Button onClick={handleAddImage} className="gap-2">

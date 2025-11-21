@@ -7,13 +7,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, Clock, Users, Phone, Mail, User } from 'lucide-react';
+import { Calendar, Clock, Users, Phone, Mail, User, ChefHat } from 'lucide-react';
 import heroRestaurant from '@/assets/hero-restaurant.jpg';
 
 const Reservations = () => {
-  const { addReservation } = useRestaurant();
+  const { addReservation, heroImages, contactPageInfo, heroTexts } = useRestaurant();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const hero = heroImages.reservations || heroRestaurant;
+  const heroTitle = heroTexts?.reservations?.title || 'Make a Reservation';
+  const heroSubtitle = heroTexts?.reservations?.subtitle || 'Book a table and experience authentic Ghanaian cuisine in our warm and welcoming restaurant';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -80,21 +83,25 @@ const Reservations = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{ backgroundImage: `url(${heroRestaurant})` }}
-        >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 scale-105 blur-[0.5px]">
+          <img src={hero} alt="Reservations hero" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center space-y-6 max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white">
-              Make a <span className="gradient-text">Reservation</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Book a table and experience authentic Ghanaian cuisine in our warm and welcoming restaurant
-            </p>
+
+        <div className="relative z-10 container mx-auto px-4 text-center py-20">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="animate-fade-in space-y-6">
+              <div className="flex justify-center mb-4">
+                <ChefHat className="h-16 w-16 text-primary" strokeWidth={1.5} />
+              </div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight text-white">
+                {heroTitle || 'Make a Reservation'}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90">
+                {heroSubtitle}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -236,14 +243,14 @@ const Reservations = () => {
                   <strong>Opening Hours:</strong>
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Monday - Friday: 11:00 AM - 10:00 PM
+                  {contactPageInfo?.contactInfo?.hours?.weekday || 'Monday - Friday: 11:00 AM - 10:00 PM'}
                 </p>
                 <p className="text-sm text-muted-foreground">
-                  Saturday - Sunday: 10:00 AM - 11:00 PM
+                  {contactPageInfo?.contactInfo?.hours?.weekend || 'Saturday - Sunday: 10:00 AM - 11:00 PM'}
                 </p>
                 <p className="text-sm text-muted-foreground mt-4">
                   For large groups (20+ guests), please call us directly at{' '}
-                  <span className="text-primary font-medium">+233 24 123 4567</span>
+                  <span className="text-primary font-medium">{contactPageInfo?.contactInfo?.phone || '+233 24 123 4567'}</span>
                 </p>
               </div>
             </CardContent>

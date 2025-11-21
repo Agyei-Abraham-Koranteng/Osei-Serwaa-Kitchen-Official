@@ -17,7 +17,6 @@ import About from "./pages/About";
 import Reservations from "./pages/Reservations";
 import Gallery from "./pages/Gallery";
 import Contact from "./pages/Contact";
-import Orders from "./pages/Orders";
 
 // Admin Pages
 import AdminLogin from "./pages/admin/AdminLogin";
@@ -51,7 +50,6 @@ const App = () => (
                 <Route path="/reservations" element={<Reservations />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/orders" element={<Orders />} />
               </Route>
 
               <Route path="/admin/login" element={<AdminLogin />} />

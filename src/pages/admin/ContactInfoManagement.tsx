@@ -6,9 +6,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import heroImage from '@/assets/hero-restaurant.jpg';
+import { useRestaurant } from '@/context/RestaurantContext';
 
 const ContactInfoManagement = () => {
   const { toast } = useToast();
+  const { setHeroImage, setContactPageInfo, setHeroText, heroTexts } = useRestaurant();
   
   const [contactInfo, setContactInfo] = useState({
     address: '123 Liberation Road\nAccra, Ghana',
@@ -21,25 +23,41 @@ const ContactInfoManagement = () => {
   });
 
   const [pageContent, setPageContent] = useState({
-    heroTitle: 'Contact Us',
-    heroSubtitle: 'Have questions? We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.',
+    heroTitle: heroTexts?.contact?.title || 'Contact Us',
+    heroSubtitle: heroTexts?.contact?.subtitle || 'Have questions? We\'d love to hear from you. Send us a message and we\'ll respond as soon as possible.',
   });
 
   const handleSave = () => {
+    // persist contact page info and hero image
+    setContactPageInfo({ pageContent, contactInfo });
+    setHeroText('contact', { title: pageContent.heroTitle, subtitle: pageContent.heroSubtitle });
+    if (heroImgPreview) setHeroImage('contact', heroImgPreview);
     toast({
       title: 'Changes saved!',
       description: 'Contact information has been updated successfully.',
     });
   };
 
+  // Hero upload state
+  const [heroImgPreview, setHeroImgPreview] = useState<string | null>(null);
+  const [heroImgFile, setHeroImgFile] = useState<File | null>(null);
+
+  const handleHeroImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setHeroImgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setHeroImgPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Hero Section */}
       <div className="relative -mx-6 -mt-6 mb-8 overflow-hidden rounded-b-xl">
-        <div 
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="h-48 relative">
+          <img src={heroImage} alt="Contact hero preview" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
         </div>
         <div className="absolute inset-0 flex items-center">
@@ -51,6 +69,19 @@ const ContactInfoManagement = () => {
       </div>
 
       {/* Page Content */}
+      {/* Hero Image Upload */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Hero Image</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Label htmlFor="hero-image">Hero Image</Label>
+          <Input type="file" id="hero-image" accept="image/*" onChange={handleHeroImgChange} />
+          {heroImgPreview && (
+            <img src={heroImgPreview} alt="Hero Preview" className="mt-2 h-32 rounded shadow" />
+          )}
+        </CardContent>
+      </Card>
       <Card>
         <CardHeader>
           <CardTitle>Page Header</CardTitle>

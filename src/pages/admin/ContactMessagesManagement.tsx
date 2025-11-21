@@ -51,10 +51,8 @@ const ContactMessagesManagement = () => {
     <div className="space-y-6">
       {/* Hero Section */}
       <div className="relative -mx-6 -mt-6 mb-8 overflow-hidden rounded-b-xl">
-        <div 
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="h-48 relative">
+          <img src={heroImage} alt="Messages hero preview" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
         </div>
         <div className="absolute inset-0 flex items-center">
@@ -64,6 +62,7 @@ const ContactMessagesManagement = () => {
           </div>
         </div>
       </div>
+      
 
       <div className="grid gap-4">
         {sortedMessages.length > 0 ? (

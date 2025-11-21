@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ChefHat } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { useRestaurant } from '@/context/RestaurantContext';
@@ -18,7 +18,10 @@ const Contact = () => {
     message: '',
   });
 
-  const { addContactMessage } = useRestaurant();
+  const { addContactMessage, heroImages, contactPageInfo, heroTexts } = useRestaurant();
+  const hero = heroImages.contact || heroRestaurant;
+  const heroTitle = heroTexts?.contact?.title || contactPageInfo?.pageContent?.heroTitle || 'Contact';
+  const heroSubtitle = heroTexts?.contact?.subtitle || contactPageInfo?.pageContent?.heroSubtitle || "Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,21 +36,25 @@ const Contact = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center scale-105"
-          style={{ backgroundImage: `url(${heroRestaurant})` }}
-        >
-          <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 scale-105 blur-[0.5px]">
+          <img src={hero} alt="Contact hero" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center space-y-6 max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-white">
-              Contact <span className="gradient-text">Us</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 leading-relaxed">
-              Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
-            </p>
+
+        <div className="relative z-10 container mx-auto px-4 text-center py-20">
+          <div className="max-w-4xl mx-auto space-y-8">
+            <div className="animate-fade-in space-y-6">
+              <div className="flex justify-center mb-4">
+                <ChefHat className="h-16 w-16 text-primary" strokeWidth={1.5} />
+              </div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight text-white">
+                {heroTitle || 'Contact Us'}
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90">
+                {heroSubtitle}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -66,8 +73,9 @@ const Contact = () => {
                   <div>
                     <h3 className="font-bold mb-2 text-lg">Address</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">
-                      123 Liberation Road<br />
-                      Accra, Ghana
+                      {contactPageInfo?.contactInfo?.address?.split('\n').map((line, i) => (
+                        <span key={i}>{line}{i < (contactPageInfo?.contactInfo?.address?.split('\n').length ?? 1) - 1 && <br />}</span>
+                      ))}
                     </p>
                   </div>
                 </div>
@@ -82,7 +90,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-bold mb-2 text-lg">Phone</h3>
-                    <p className="text-sm text-muted-foreground">+233 24 123 4567</p>
+                    <p className="text-sm text-muted-foreground">{contactPageInfo?.contactInfo?.phone || '+233 24 123 4567'}</p>
                   </div>
                 </div>
               </CardContent>
@@ -96,7 +104,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <h3 className="font-bold mb-2 text-lg">Email</h3>
-                    <p className="text-sm text-muted-foreground">hello@oseiserwaa.com</p>
+                    <p className="text-sm text-muted-foreground">{contactPageInfo?.contactInfo?.email || 'hello@oseiserwaa.com'}</p>
                   </div>
                 </div>
               </CardContent>
@@ -111,8 +119,8 @@ const Contact = () => {
                   <div>
                     <h3 className="font-bold mb-2 text-lg">Opening Hours</h3>
                     <div className="text-sm text-muted-foreground space-y-2 leading-relaxed">
-                      <p>Mon - Fri: 11:00 AM - 10:00 PM</p>
-                      <p>Sat - Sun: 10:00 AM - 11:00 PM</p>
+                      <p>{contactPageInfo?.contactInfo?.hours?.weekday || 'Mon - Fri: 11:00 AM - 10:00 PM'}</p>
+                      <p>{contactPageInfo?.contactInfo?.hours?.weekend || 'Sat - Sun: 10:00 AM - 11:00 PM'}</p>
                     </div>
                   </div>
                 </div>

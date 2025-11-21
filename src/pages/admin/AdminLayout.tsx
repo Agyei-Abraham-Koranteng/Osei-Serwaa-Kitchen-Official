@@ -5,9 +5,13 @@ import { LayoutDashboard, UtensilsCrossed, Users, Calendar, Image, Phone, LogOut
 import { useState } from 'react';
 
 const AdminLayout = () => {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user, loading } = useAuth();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  if (loading) {
+    return null; // or a loading placeholder while auth is initialized
+  }
 
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;

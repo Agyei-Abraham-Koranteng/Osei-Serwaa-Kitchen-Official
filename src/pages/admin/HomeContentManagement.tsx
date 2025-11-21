@@ -4,15 +4,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
+import { useRestaurant } from '@/context/RestaurantContext';
 import { useToast } from '@/hooks/use-toast';
 import heroImage from '@/assets/hero-restaurant.jpg';
 
 const HomeContentManagement = () => {
   const { toast } = useToast();
+  const { setHeroImage, setHomeContent, heroTexts, setHeroText } = useRestaurant();
   const [heroContent, setHeroContent] = useState({
-    title: 'Osei Serwaa Kitchen',
-    subtitle: 'Authentic West African Cuisine',
-    tagline: 'Experience the rich flavors and traditions of Ghana in every dish',
+    title: heroTexts?.home?.title || 'Osei Serwaa Kitchen',
+    subtitle: heroTexts?.home?.subtitle || 'Authentic West African Cuisine',
+    tagline: heroTexts?.home?.tagline || 'Experience the rich flavors and traditions of Ghana in every dish',
   });
 
   const [features, setFeatures] = useState([
@@ -27,7 +29,30 @@ const HomeContentManagement = () => {
     description: 'Book a table and come experience the best of authentic Ghanaian cuisine.',
   });
 
+  // Hero image editing state
+  const [heroImgPreview, setHeroImgPreview] = useState<string | null>(null);
+  const [heroImgFile, setHeroImgFile] = useState<File | null>(null);
+
+  const handleHeroImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setHeroImgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeroImgPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleSave = () => {
+    // persist home content and hero image
+    setHomeContent({ hero: heroContent, features, cta: ctaSection });
+    // Persist hero text separately so public pages reflect these values
+    setHeroText('home', { title: heroContent.title, subtitle: heroContent.subtitle, tagline: heroContent.tagline });
+    if (heroImgPreview) {
+      setHeroImage('home', heroImgPreview);
+    }
     toast({
       title: 'Changes saved!',
       description: 'Home page content has been updated successfully.',
@@ -38,24 +63,42 @@ const HomeContentManagement = () => {
     <div className="space-y-8">
       {/* Hero Section */}
       <div className="relative -mx-6 -mt-6 mb-8 overflow-hidden rounded-b-xl">
-        <div 
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="h-48 relative">
+          <img src={heroImgPreview || heroImage} alt="Home hero preview" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
-        </div>
-        <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-10">
-            <h1 className="text-4xl font-bold text-white mb-2">Home Content Management</h1>
-            <p className="text-white/90">Manage the content displayed on the home page</p>
-          </div>
         </div>
       </div>
 
-      {/* Hero Section */}
+      {/* Hero Image */}
       <Card>
         <CardHeader>
-          <CardTitle>Hero Section</CardTitle>
+          <CardTitle>Hero Image</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Hero Image Upload */}
+          <div>
+            <Label htmlFor="hero-image">Hero Image</Label>
+            <Input type="file" id="hero-image" accept="image/*" onChange={handleHeroImgChange} />
+            {heroImgPreview && (
+              <img src={heroImgPreview} alt="Hero Preview" className="mt-2 h-32 rounded shadow" />
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="hero-tagline">Tagline</Label>
+            <Textarea
+              id="hero-tagline"
+              value={heroContent.tagline}
+              onChange={(e) => setHeroContent({ ...heroContent, tagline: e.target.value })}
+              rows={3}
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Page Header (Title & Subtitle) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Page Header</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -72,15 +115,6 @@ const HomeContentManagement = () => {
               id="hero-subtitle"
               value={heroContent.subtitle}
               onChange={(e) => setHeroContent({ ...heroContent, subtitle: e.target.value })}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="hero-tagline">Tagline</Label>
-            <Textarea
-              id="hero-tagline"
-              value={heroContent.tagline}
-              onChange={(e) => setHeroContent({ ...heroContent, tagline: e.target.value })}
-              rows={3}
             />
           </div>
         </CardContent>

@@ -7,24 +7,20 @@ import MenuCard from '@/components/MenuCard';
 import heroImage from '@/assets/hero-restaurant.jpg';
 
 const Home = () => {
-  const { menuItems } = useRestaurant();
+  const { menuItems, heroImages, homeContent, heroTexts } = useRestaurant();
   const featuredItems = menuItems.filter((item) => item.featured).slice(0, 3);
+  const hero = heroImages.home || heroImage;
+  const heroTitle = heroTexts?.home?.title || homeContent?.hero?.title;
+  const heroSubtitle = heroTexts?.home?.subtitle || homeContent?.hero?.subtitle;
+  const heroTagline = heroTexts?.home?.tagline || homeContent?.hero?.tagline;
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center scale-105 blur-[0.5px]"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="absolute inset-0 scale-105 blur-[0.5px]">
+          <img src={hero} alt="Home hero" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/60" />
-        </div>
-
-        {/* Decorative Elements */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 right-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-20 left-10 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
         </div>
 
         <div className="relative z-10 container mx-auto px-4 text-center py-20">
@@ -34,14 +30,14 @@ const Home = () => {
                 <ChefHat className="h-16 w-16 text-primary" strokeWidth={1.5} />
               </div>
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight tracking-tight text-white">
-                Osei Serwaa Kitchen
+                {heroTitle || 'Osei Serwaa Kitchen'}
               </h1>
               <p className="text-xl md:text-2xl text-white/90">
-                Authentic West African Cuisine
+                {heroSubtitle || 'Authentic West African Cuisine'}
               </p>
             </div>
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed animate-slide-up">
-              Experience the rich flavors and traditions of Ghana in every dish
+              {heroTagline || 'Experience the rich flavors and traditions of Ghana in every dish'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4 animate-slide-up">
               <Link to="/menu">
@@ -70,43 +66,26 @@ const Home = () => {
       <section className="py-24 bg-gradient-subtle">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: Award,
-                title: 'Award Winning',
-                description: 'Recognized for excellence in authentic cuisine',
-              },
-              {
-                icon: Star,
-                title: 'Quality Ingredients',
-                description: 'Fresh, locally sourced ingredients daily',
-              },
-              {
-                icon: Clock,
-                title: 'Fast Service',
-                description: 'Quick preparation without compromising quality',
-              },
-              {
-                icon: Heart,
-                title: 'Made with Love',
-                description: 'Every dish prepared with care and passion',
-              },
-            ].map((feature, index) => (
-              <Card
-                key={index}
-                className="text-center hover:shadow-card transition-all duration-500 hover-scale group border-border/50 hover:border-primary/20"
-              >
-                <CardContent className="pt-10 pb-8 space-y-5">
-                  <div className="flex justify-center">
-                    <div className="p-5 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl group-hover:scale-110 transition-transform duration-500 shadow-sm">
-                      <feature.icon className="h-9 w-9 text-primary" />
+            {(homeContent?.features || []).map((feature, index) => {
+              const icons = [Award, Star, Clock, Heart];
+              const Icon = icons[index % icons.length];
+              return (
+                <Card
+                  key={index}
+                  className="text-center hover:shadow-card transition-all duration-500 hover-scale group border-border/50 hover:border-primary/20"
+                >
+                  <CardContent className="pt-10 pb-8 space-y-5">
+                    <div className="flex justify-center">
+                      <div className="p-5 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl group-hover:scale-110 transition-transform duration-500 shadow-sm">
+                        <Icon className="h-9 w-9 text-primary" />
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="text-xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
+                    <h3 className="text-xl font-bold">{feature.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -156,10 +135,10 @@ const Home = () => {
 
         <div className="container mx-auto px-4 text-center space-y-10 relative z-10">
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
-            Ready to Experience True Ghanaian Flavors?
+            {homeContent?.cta?.title || 'Ready to Experience True Ghanaian Flavors?'}
           </h2>
           <p className="text-xl md:text-2xl max-w-2xl mx-auto opacity-95 leading-relaxed">
-            Book a table and come experience the best of authentic Ghanaian cuisine.
+            {homeContent?.cta?.description || 'Book a table and come experience the best of authentic Ghanaian cuisine.'}
           </p>
           <div className="flex justify-center pt-6">
             <Link to="/reservations">

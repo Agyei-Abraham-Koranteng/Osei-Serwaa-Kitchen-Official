@@ -14,7 +14,12 @@ import { MenuItem } from '@/context/RestaurantContext';
 import heroImage from '@/assets/hero-restaurant.jpg';
 
 const MenuManagement = () => {
-  const { menuItems, categories, addMenuItem, updateMenuItem, deleteMenuItem } = useRestaurant();
+  const { menuItems, categories, addMenuItem, updateMenuItem, deleteMenuItem, setHeroImage, heroTexts, setHeroText } = useRestaurant();
+
+  const [pageHeader, setPageHeader] = useState({
+    title: heroTexts?.menu?.title || 'Our Menu',
+    subtitle: heroTexts?.menu?.subtitle || 'Explore our selection of authentic Ghanaian dishes, prepared fresh daily with traditional recipes',
+  });
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
@@ -29,6 +34,28 @@ const MenuManagement = () => {
     available: true,
     spicyLevel: '0',
   });
+
+  // Hero image editing state for Menu page
+  const [heroImgPreview, setHeroImgPreview] = useState<string | null>(null);
+  const [heroImgFile, setHeroImgFile] = useState<File | null>(null);
+
+  const handleHeroImgChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setHeroImgFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeroImgPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSaveHero = () => {
+    if (heroImgPreview) setHeroImage('menu', heroImgPreview);
+    setHeroText('menu', { title: pageHeader.title, subtitle: pageHeader.subtitle });
+    toast({ title: 'Hero saved', description: 'Menu hero image and text updated.' });
+  };
 
   const resetForm = () => {
     setFormData({
@@ -120,10 +147,8 @@ const MenuManagement = () => {
     <div className="space-y-6">
       {/* Hero Section */}
       <div className="relative -mx-6 -mt-6 mb-8 overflow-hidden rounded-b-xl">
-        <div 
-          className="h-48 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
+        <div className="h-48 relative">
+          <img src={heroImgPreview || heroImage} alt="Menu hero preview" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50" />
         </div>
         <div className="absolute inset-0 flex items-center">
@@ -133,6 +158,50 @@ const MenuManagement = () => {
           </div>
         </div>
       </div>
+
+      {/* Hero Image Upload */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Hero Image</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Label htmlFor="hero-image">Hero Image</Label>
+          <Input type="file" id="hero-image" accept="image/*" onChange={handleHeroImgChange} />
+          {heroImgPreview && (
+            <img src={heroImgPreview} alt="Hero Preview" className="mt-2 h-32 rounded shadow" />
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Page Header (Title & Subtitle) */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Page Header</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="hero-title">Hero Title</Label>
+              <Input
+                id="hero-title"
+                value={pageHeader.title}
+                onChange={(e) => setPageHeader({ ...pageHeader, title: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="hero-subtitle">Hero Subtitle</Label>
+              <Input
+                id="hero-subtitle"
+                value={pageHeader.subtitle}
+                onChange={(e) => setPageHeader({ ...pageHeader, subtitle: e.target.value })}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button onClick={handleSaveHero} size="sm">Save Hero</Button>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="flex justify-end">
         <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -158,30 +227,15 @@ const MenuManagement = () => {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                 />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="item-description">Description</Label>
-                <Textarea
-                  id="item-description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
+                <Input
+                  id="item-price"
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  required
                 />
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="item-price">Price (GH₵) *</Label>
-                  <Input
-                    id="item-price"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    required
-                  />
                 </div>
 
                 <div className="space-y-2">
@@ -209,7 +263,6 @@ const MenuManagement = () => {
                     </SelectContent>
                   </Select>
                 </div>
-              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="item-spicy">Spicy Level</Label>
