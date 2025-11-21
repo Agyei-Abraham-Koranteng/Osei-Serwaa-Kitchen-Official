@@ -1,13 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useRestaurant } from '@/context/RestaurantContext';
-import { Calendar, UtensilsCrossed, MessageSquare, Users, Home, Image, Phone } from 'lucide-react';
+import { Calendar, UtensilsCrossed, MessageSquare, Users, Home, Image, Phone, Eye, RotateCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
-  const { reservations, menuItems, contactMessages } = useRestaurant();
+  const { reservations, menuItems, contactMessages, siteVisitors, resetSiteVisitors } = useRestaurant();
 
   const stats = [
+    {
+      title: 'Site Visitors',
+      value: siteVisitors,
+      icon: Eye,
+      color: 'text-sky-600',
+      bgColor: 'bg-sky-50',
+    },
     {
       title: 'Reservations',
       value: reservations.length,
@@ -21,13 +28,6 @@ const Dashboard = () => {
       icon: UtensilsCrossed,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
-    },
-    {
-      title: 'Contact Messages',
-      value: contactMessages.filter(m => m.status === 'unread').length,
-      icon: MessageSquare,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-50',
     },
     {
       title: 'Confirmed Bookings',
@@ -69,17 +69,24 @@ const Dashboard = () => {
           const Icon = stat.icon;
           return (
             <Card key={stat.title}>
-              <CardContent className="pt-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
-                    <p className="text-3xl font-bold mt-2">{stat.value}</p>
-                  </div>
-                  <div className={`p-3 rounded-full ${stat.bgColor}`}>
-                    <Icon className={`h-6 w-6 ${stat.color}`} />
-                  </div>
-                </div>
-              </CardContent>
+                  <CardContent className="pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-muted-foreground">{stat.title}</p>
+                        <p className="text-3xl font-bold mt-2">{stat.value}</p>
+                        {stat.title === 'Site Visitors' && (
+                          <div className="mt-3">
+                            <Button size="sm" variant="ghost" onClick={resetSiteVisitors} className="px-2">
+                              <RotateCw className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                      <div className={`p-3 rounded-full ${stat.bgColor}`}>
+                        <Icon className={`h-6 w-6 ${stat.color}`} />
+                      </div>
+                    </div>
+                  </CardContent>
             </Card>
           );
         })}

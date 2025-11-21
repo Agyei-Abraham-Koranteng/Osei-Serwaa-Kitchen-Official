@@ -22,11 +22,11 @@ const AdminLayout = () => {
     { path: '/admin/home', label: 'Home Content', icon: Home },
     { path: '/admin/menu', label: 'Menu Management', icon: UtensilsCrossed },
     { path: '/admin/about', label: 'About Content', icon: Users },
-      { path: '/admin/manage-admins', label: 'Manage Admins', icon: Users },
     { path: '/admin/reservations', label: 'Reservations', icon: Calendar },
     { path: '/admin/gallery', label: 'Gallery', icon: Image },
     { path: '/admin/contact', label: 'Contact Info', icon: Phone },
     { path: '/admin/contact-messages', label: 'Messages', icon: MessageSquare },
+    { path: '/admin/manage-admins', label: 'Manage Admins', icon: Users },
   ];
 
   const isActive = (path: string) => location.pathname === path;

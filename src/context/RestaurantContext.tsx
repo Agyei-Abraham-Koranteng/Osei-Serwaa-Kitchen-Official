@@ -127,6 +127,9 @@ interface RestaurantContextType {
   setGalleryImages: (imgs: GalleryImage[]) => void;
   contactPageInfo: ContactPageInfo;
   setContactPageInfo: (info: ContactPageInfo) => void;
+  siteVisitors: number;
+  incrementSiteVisitors: () => void;
+  resetSiteVisitors: () => void;
 }
 
 const RestaurantContext = createContext<RestaurantContextType | undefined>(undefined);
@@ -246,6 +249,33 @@ export const RestaurantProvider = ({ children }: { children: ReactNode }) => {
       },
     };
   });
+
+  // Site visitors (simple client-side counter persisted in localStorage)
+  const [siteVisitors, setSiteVisitors] = useState<number>(() => {
+    try {
+      const raw = localStorage.getItem('site-visitors');
+      return raw ? parseInt(raw, 10) : 0;
+    } catch {
+      return 0;
+    }
+  });
+
+  const incrementSiteVisitors = () => {
+    setSiteVisitors((prev) => {
+      const next = prev + 1;
+      try {
+        localStorage.setItem('site-visitors', String(next));
+      } catch {}
+      return next;
+    });
+  };
+
+  const resetSiteVisitors = () => {
+    try {
+      localStorage.setItem('site-visitors', '0');
+    } catch {}
+    setSiteVisitors(0);
+  };
 
   // Load cart from localStorage
   useEffect(() => {
@@ -428,6 +458,9 @@ export const RestaurantProvider = ({ children }: { children: ReactNode }) => {
     setAboutContent,
     galleryImages,
     setGalleryImages,
+    siteVisitors,
+    incrementSiteVisitors,
+    resetSiteVisitors,
     contactPageInfo,
     setContactPageInfo,
   };
